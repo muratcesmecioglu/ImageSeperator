@@ -152,7 +152,7 @@ router.get('/', function(req, res) {
                 </style>
                 <script>
                     function createTag(file) {
-                        var tagName = prompt("Tag Name?\n\nYou can write names like folder or sub/folder","");
+                        var tagName = prompt("Tag Name?\\n\\nYou can write names like folder or sub/folder","");
                         location.href = "/go?action=new&file=" + file + "&name=" + tagName
                     }
                 </script>
