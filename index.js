@@ -153,7 +153,9 @@ router.get('/', function(req, res) {
                 <script>
                     function createTag(file) {
                         var tagName = prompt("Tag Name?\\n\\nYou can write names like folder or sub/folder","");
-                        location.href = "/go?action=new&file=" + file + "&name=" + tagName
+                        if (tagName) {
+                            location.href = "/go?action=new&file=" + file + "&name=" + tagName
+                        }
                     }
                 </script>
             </head>
@@ -197,17 +199,14 @@ router.get('/', function(req, res) {
 
 router.get('/go', function(req, res) {
     if (req.query.action == "new") {
-        //New tag and move
         tempArr = db.get("tags")
         tempArr.push(req.query.name)
-        console.log(tempArr)
         db.set("tags",tempArr)
 
         makeFolder(req.query.name)
 
         move(MAIN_FOLDER + "\\" + req.query.file, MAIN_FOLDER + "\\" + req.query.name + "\\" + req.query.file, function (err) {
             if (err) throw err
-            console.log(req.query.file + ' -> Taşıma Başarılı!')
         })
 
         res.redirect('/')
@@ -217,7 +216,6 @@ router.get('/go', function(req, res) {
 
         move(MAIN_FOLDER + "\\" + req.query.file, MAIN_FOLDER + "\\" + req.query.tag + "\\" + req.query.file, function (err) {
             if (err) throw err
-            console.log(req.query.file + ' -> Taşıma Başarılı!')
         })
         
         res.redirect('/')
@@ -250,7 +248,6 @@ router.get('/settings', function(req, res) {
                 margin-bottom: 5px;
                 display: inherit;
             }
-
             </style>
         </head>
         <body>
@@ -269,7 +266,6 @@ router.get('/settings', function(req, res) {
     res.end()
 })
 router.post('/settings', function(req, res) {
-    //post requesst?
     if (req.body.folder != undefined) {
         MAIN_FOLDER = req.body.folder
         router.use('/image', express.static(MAIN_FOLDER))
